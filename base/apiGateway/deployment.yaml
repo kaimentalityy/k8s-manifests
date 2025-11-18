@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway
+  labels:
+    app: api-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-gateway
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+    spec:
+      containers:
+        - name: api-gateway
+          image: api-gateway:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SERVER_PORT
+              value: "8080"
+            - name: USER_SERVICE_URI
+              value: http://user-service:8082
+            - name: ORDER_SERVICE_URI
+              value: http://order-service:8086
+            - name: PAYMENT_SERVICE_URI
+              value: http://payment-service:8087
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              value: kafka:29092
