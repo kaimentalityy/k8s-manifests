@@ -17,10 +17,31 @@ spec:
       containers:
         - name: payment-service
           image: payment-service:latest
+          imagePullPolicy: Never
           ports:
             - containerPort: 8087
+          livenessProbe:
+            tcpSocket:
+              port: 8087
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            tcpSocket:
+              port: 8087
+            initialDelaySeconds: 5
+            periodSeconds: 10
           env:
             - name: SERVER_PORT
               value: "8087"
+            - name: SPRING_DATA_MONGODB_URI
+              value: "mongodb://root:secret@mongodb:27017/payment_db?authSource=admin"
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:postgresql://postgres-payment:5432/payment_db"
+            - name: SPRING_DATASOURCE_USERNAME
+              value: "postgres"
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: "17052007"
             - name: KAFKA_BOOTSTRAP_SERVERS
-              value: kafka:29092
+              value: "kafka:9092"
+            - name: KAFKA_PAYMENT_EVENTS_TOPIC
+              value: "payment-events"

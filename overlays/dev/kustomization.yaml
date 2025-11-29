@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base/userService
+  - ../../base/paymentService
+  - ../../base/orderService
+  - ../../base/apiGateway
+  - ../../base/authService
+  - ../../base/infrastructure
+
+patches:
+  - path: patches/user-replicas.yaml
+  - path: patches/payment-replicas.yaml
+  - path: patches/order-replicas.yaml
+  - path: patches/apiGateway-replicas.yaml
